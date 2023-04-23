@@ -8,15 +8,15 @@ void Swap(int* num,int i,int j){
     num[j] = temp;
 }
 
-//���ѵ���
+//最大堆调整
 void Heapify(int* num,int len,int k)
 {
     if (k < len)
     {
-        int root = k;           //�����
-        int lchild = 2 * k + 1; //���ӽ��
-        int rchild = 2 * k + 2; //�Һ��ӽ��
-        //�������Һ��ӽ���е������
+        int root = k;           //根结点
+        int lchild = 2 * k + 1; //左孩子结点
+        int rchild = 2 * k + 2; //右孩子结点
+        //查找左右孩子结点中的最大结点
         if ( lchild < len && num[root] < num[lchild])
         {
             root = lchild;
@@ -26,46 +26,46 @@ void Heapify(int* num,int len,int k)
             root = rchild;
         }
 
-        //��������㵽���ڵ�
+        //交换最大结点到根节点
         if ( root != k )
         {
             Swap(num,root,k);
-            //ÿ�ν���������Ӱ�쵽��Ӧ���ӽ��������˳��
-            //��Ҫ�Խ�����ĺ��ӽ�������������ѵ���
+            //每次交换都可能影响到对应孩子结点字数的顺序
+            //需要对交换后的孩子结点子树进行最大堆调整
             Heapify(num,len,root);
         }
     }
 }
 
-//��������
+//创建最大堆
 void CreateHeap(int* num,int len)
 {
     int i;
-    //���һ������±�
+    //最后一个结点下标
     int last = len - 1;
-    //���һ���ڵ�ĸ�����±�
+    //最后一个节点的父结点下标
     int parent = (last - 1) / 2;
-    //�����һ���ڵ�ĸ��ڵ㵽���ڵ㣬һ�ν������ѵ���
+    //从最后一个节点的父节点到根节点，一次进行最大堆调整
     for (i = parent;i >= 0;i--)
     {
         Heapify(num,len,i);
     }
 }
 
-//������
+//堆排序
 void HeapSort(int* num,int len)
 {
-    //�������Ѳ��������ѵ���
+    //创建最大堆并进行最大堆调整
     CreateHeap(num,len);
-    printf("���ѵ���!\n");
+    printf("最大堆调整!\n");
     int i;
-    //һ��ȡ�������(���ֵ)
+    //一次取出根结点(最大值)
     for(int i = len - 1;i >= 0;i--)
     {
-        //�����ѵĸ��ڵ�(���ֵ)�������һ�����
+        //将最大堆的根节点(最大值)换到最后一个结点
         Swap(num,i,0);
-        //�����������ĸ��ڵ㷢���ı䣬���Ի���Ҫ�Ը������������
-        //����ʱ�����С�����и��ڵ㣬����ڵ���ʱֻ�迼������ӵķ�֧����
+        //交换二叉树的根节点发生改变，所以还需要对根结点做最大调整
+        //而此时根结点小于所有父节点，因而在调整时只需考虑最大孩子的分支即可
         Heapify(num,i,0);
     }
 }
